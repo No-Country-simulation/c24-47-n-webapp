@@ -1,2 +1,2 @@
 # c24-47-n-webapp
-proyecto webapp de simulación laboral
+Proyecto webApp de simulación laboral
