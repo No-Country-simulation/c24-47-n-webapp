@@ -3,3 +3,5 @@
 Proyecto webApp de simulación laboral
 
 conectado el main
+
+conectando front
