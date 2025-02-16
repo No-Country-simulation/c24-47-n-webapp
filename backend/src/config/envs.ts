@@ -8,6 +8,7 @@ interface EnvVars {
   MAILER_SERVICE: string;
   MAILER_EMAIL: string;
   MAILER_SECRET_KEY: string;
+  JWT_SECRET: string;
 }
 
 const envsSchema = joi
@@ -17,6 +18,7 @@ const envsSchema = joi
     MAILER_SERVICE: joi.string().required(),
     MAILER_EMAIL: joi.string().required(),
     MAILER_SECRET_KEY: joi.string().required(),
+    JWT_SECRET: joi.string().required(),
   })
   .unknown(true);
 
@@ -34,4 +36,5 @@ export const envs = {
   mailerService: envVars.MAILER_SERVICE,
   mailerEmail: envVars.MAILER_EMAIL,
   mailerSecretKey: envVars.MAILER_SECRET_KEY,
+  jwtSecret: envVars.JWT_SECRET,
 };
