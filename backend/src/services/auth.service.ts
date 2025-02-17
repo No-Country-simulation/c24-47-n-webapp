@@ -1,10 +1,11 @@
-import { BcryptAdapter } from "../config/adapters/bcrypt";
-import { JwtAdapter } from "../config/adapters/jwt";
-import { prisma } from "../data/prisma-db";
-import { LoginUserDto, RegisterUserDto } from "../dto";
-import { CustomError } from "../utils/custom.error";
-import { EmailService } from "./email.service";
-
+import { User } from '@prisma/client';
+import { BcryptAdapter } from '../config/adapters/bcrypt';
+import { JwtAdapter } from '../config/adapters/jwt';
+import { prisma } from '../data/prisma-db';
+import { LoginUserDto, RegisterUserDto } from '../dto';
+import { CustomError } from '../utils/custom.error';
+import { EmailService } from './email.service';
+import { ResponseUserDto } from '../dto/user/user-response.dto';
 
 type HashFunction = (password: string) => string;
 type ConpareFunction = (password: string, hashed: string) => boolean;
@@ -26,17 +27,23 @@ export class AuthService {
     }
 
     try {
-        const hashPassword = this.hashPassword(password);
-        const user = await prisma.user.create({
-          data: {
-            email,
-            name,
-            password: hashPassword,
-          },
-        });
+      const hashPassword = this.hashPassword(password);
+      const user = await prisma.user.create({
+        data: {
+          email,
+          name,
+          password: hashPassword,
+        },
+      });
 
-        return user;
+      const [error, userDto] = ResponseUserDto.create(user);
+      if (error) {
+        throw CustomError.internalServer(error);
+      }
 
+      return {
+        user: userDto,
+      };
     } catch (error) {
       if (error instanceof CustomError) {
         throw error;
@@ -57,14 +64,17 @@ export class AuthService {
       throw CustomError.unauthorized('Invalid credentials');
     }
 
-    const token = await this.generateJWTService(user.id);
+    const [error, userDto] = ResponseUserDto.create(user);
+    if (error) {
+      throw CustomError.internalServer(error);
+    }
 
+    const token = await this.generateJWTService(user.id);
     return {
-      user,
+      user: userDto,
       token,
     };
   }
-
 
   private async generateJWTService(id: number) {
     const token = await JwtAdapter.generateToken({ id }, '128d');
@@ -73,6 +83,4 @@ export class AuthService {
     }
     return token;
   }
-
-
 }
