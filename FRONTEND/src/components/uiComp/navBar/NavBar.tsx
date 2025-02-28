@@ -24,7 +24,7 @@ export default function NavBar() {
           <Typography>App adfasdf</Typography>
           <Button
             color="inherit"
-            sx={{ border: 2, borderColor: "inherit", borderRadius: 3 }}
+            sx={{ border: 2, borderColor: "inherit", borderRadius: 3, marginLeft: "auto"}}
           >
             log in
           </Button>
