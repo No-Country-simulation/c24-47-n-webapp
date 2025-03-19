@@ -26,7 +26,7 @@ const reviews = [
 
 const ReviewCards = () => {
   return (
-    <Grid2 container spacing={3} justifyContent="center">
+    <Grid2 container spacing={3} justifyContent="center" paddingTop={2} margin={2}>
       {reviews.map((review, index) => (
         <Grid2 size={{ xs: 12, sm: 6, md: 4 }} key={index}>
           <Card sx={{ height: "100%" }}>
